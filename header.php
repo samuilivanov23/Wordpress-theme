@@ -9,18 +9,7 @@
             src="https://maps.googleapis.com/maps/api/js?&key=AIzaSyAx04NtoyYgnm6kBsk7JTi6T4GAYZ-Ar28&callback=initMap">
         </script>
 
-        <!-- <script src="http://maps.google.com/maps/api/js?sensor=false" 
-          type="text/javascript"></script> -->
-
         <?php
-
-            // echo "
-            // <table>
-            //     <tr>
-            //         <th>Id</th>
-            //         <th>Latitude<th>
-            //         <th>Longitude</th>
-            //     </tr>";
 
             //database credentials
             $dbhost = "localhost";
@@ -50,10 +39,6 @@
                     //adding the locations to arrays
                     $latitude_array[] = $row["latitude"];
                     $longitude_array[] = $row["longitude"];
-
-                    // echo "<tr><td>" . $row["id"] . "</td><td>" 
-                    // . $row["latitude"] . "</td><td>" 
-                    // . $row["longitude"] . "</td><tr>";
                 }
 
             }

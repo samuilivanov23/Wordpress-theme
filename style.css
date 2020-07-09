@@ -2,3 +2,8 @@
 Theme name: Custom Theme
 Author: Samuil
 */
+
+body 
+{
+    background-color: grey;
+}

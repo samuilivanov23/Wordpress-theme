@@ -28,11 +28,17 @@
 
     $sql_query = "select * from locations";
     $result = $connection->query($sql_query);
+    $latitude_array = array();
+    $longitude_array = array();
 
     if($result->num_rows > 0)
     {
         while($row = $result->fetch_assoc()) 
         {
+            //adding the locations to arrays
+            $latitude_array[] = $row["latitude"];
+            $longitude_array[] = $row["longitude"];
+
             echo "<tr><td>" . $row["id"] . "</td><td>" 
             . $row["latitude"] . "</td><td>" 
             . $row["longitude"] . "</td><tr>";
@@ -44,6 +50,8 @@
     {
         echo "No rows in this table";
     }
+    // print_r($longitude_array[0]);
+    // print_r($latitude_array[1]);
     mysqli_close($connection);
 ?>
 

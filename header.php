@@ -5,9 +5,6 @@
 
         <?php wp_head();?>
         <title>Simple Markers</title>
-        <script async defer
-            src="https://maps.googleapis.com/maps/api/js?&key=AIzaSyAx04NtoyYgnm6kBsk7JTi6T4GAYZ-Ar28&callback=initMap">
-        </script>
 
         <?php
 

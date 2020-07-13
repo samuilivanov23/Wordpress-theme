@@ -20,11 +20,10 @@
             //checking if the connection is successful
             if($connection -> connect_error) //if(!connection)
             {
-                echo "not working";
                 die("Connection failed: " . $connection->connect_error);
             }
 
-            $sql_query = "select * from locations";
+            $sql_query = "select * from locations_";
             $result = $connection->query($sql_query);
             $latitude_array = array();
             $longitude_array = array();
@@ -34,8 +33,14 @@
                 while($row = $result->fetch_assoc()) 
                 {
                     //adding the locations to arrays
-                    $latitude_array[] = $row["latitude"];
-                    $longitude_array[] = $row["longitude"];
+                    //Add location filtering
+                    if($row["state_"] == "CA")
+                    {
+                        $latitude_array[] = $row["latitude"];
+                        $longitude_array[] = $row["longitude"];
+                    }
+                    
+                    // {lat: $row["latitude"], lng: $row["longitude"]};
                 }
 
             }
@@ -43,7 +48,6 @@
             {
                 echo "No rows in this table";
             }
-
             mysqli_close($connection);
         ?>
 
@@ -53,16 +57,13 @@
             {
                 var lon_array = <?php echo json_encode($longitude_array); ?>;
                 var lat_array =<?php echo json_encode($latitude_array); ?>;
+
                 console.log("map is not showing...");
 
                 var map = new google.maps.Map(document.getElementById('map'), {
-                    zoom: 10,
+                    zoom: 3,
                     center: new google.maps.LatLng(lat_array[0], lon_array[0]),
                     mapTypeId: google.maps.MapTypeId.ROADMAP
-                });
-
-                google.maps.event.addListenerOnce(map, 'idle', function(){
-                    console.log("map loaded");
                 });
 
                 var marker, i;

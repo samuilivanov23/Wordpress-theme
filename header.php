@@ -5,6 +5,7 @@
 
         <?php wp_head();?>
         <title>Simple Markers</title>
+        <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
 
         <?php
 
@@ -23,7 +24,7 @@
                 die("Connection failed: " . $connection->connect_error);
             }
 
-            $sql_query = "select * from locations_";
+            $sql_query = "select * from locations";
             $result = $connection->query($sql_query);
             $latitude_array = array();
             $longitude_array = array();
@@ -34,11 +35,14 @@
                 {
                     //adding the locations to arrays
                     //Add location filtering
-                    if($row["state_"] == "CA")
-                    {
-                        $latitude_array[] = $row["latitude"];
-                        $longitude_array[] = $row["longitude"];
-                    }
+                    // if($row["state_"] == "CA")
+                    // {
+                    //     $latitude_array[] = $row["latitude"];
+                    //     $longitude_array[] = $row["longitude"];
+                    // }
+
+                    $latitude_array[] = $row["latitude"];
+                    $longitude_array[] = $row["longitude"];
                     
                     // {lat: $row["latitude"], lng: $row["longitude"]};
                 }
@@ -66,13 +70,18 @@
                     mapTypeId: google.maps.MapTypeId.ROADMAP
                 });
 
-                var marker, i;
-                for (i = 0; i < lat_array.length; i++) {  
-                    marker = new google.maps.Marker({
+                // Add some markers to the map.
+                // Using map function to create an array of markers based on a given "locations" array.
+                var markers = lat_array.map(function(location, i) {
+                    return new google.maps.Marker({
                         position: new google.maps.LatLng(lat_array[i], lon_array[i]),
                         map: map
                     });
-                }
+                });
+
+                // Add a marker clusterer to manage the markers.
+                var markerCluster = new MarkerClusterer(map, markers,
+                    {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
             }
 
         </script>

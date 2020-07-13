@@ -13,7 +13,7 @@
         wp_enqueue_script('customjs');
 
         $map_api_key = "AIzaSyAx04NtoyYgnm6kBsk7JTi6T4GAYZ-Ar28";
-        wp_enqueue_script('googleapis', esc_url( add_query_arg( 'key', $map_api_key.'&callback=initMap', '//maps.googleapis.com/maps/api/js' )), array(), null, false );
+        wp_enqueue_script('googleapis', esc_url( add_query_arg( 'key', $map_api_key.'&callback=initMap', '//maps.googleapis.com/maps/api/js' )), array(), null, true );
     }
     add_action('wp_enqueue_scripts', 'load_javascript');
 

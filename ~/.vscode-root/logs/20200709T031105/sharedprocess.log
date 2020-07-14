@@ -1,2 +1,0 @@
-[2020-07-09 03:11:10.747] [sharedprocess] [info] main {"machineId":"6c66b3d8422749a384d82930022b5f893f3d141f69d0ea85e85664380c55a9b8","windowId":2}
-[2020-07-09 03:11:10.944] [sharedprocess] [error] [File Watcher (node.js)] Error: ENOENT: no such file or directory, stat '/var/www/html/wordpress/wp-content/themes/customtheme/~/.vscode-root/User/snippets'

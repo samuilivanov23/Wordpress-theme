@@ -1,14 +1,8 @@
 <?php
     include '../conf-db.php';
-
-    //database credentials
-    $dbhost = $dbhost_;
-    $dbuser = $dbuser_;
-    $dbpass = $dbpass_;
-    $dbname = $dbname_;
-
+    
     //connecting to the database
-    $connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+    $connection = mysqli_connect($dbhost_, $dbuser_, $dbpass_, $dbname_);
     
     //checking if the connection is successful
     if($connection -> connect_error)

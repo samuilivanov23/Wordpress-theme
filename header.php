@@ -8,12 +8,13 @@
         <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
 
         <?php
+            include 'conf-db.php';
 
             //database credentials
-            $dbhost = "localhost";
-            $dbuser = "root";
-            $dbpass = "wordpressadmin";
-            $dbname = "wordpress";
+            $dbhost = $dbhost_;
+            $dbuser = $dbuser_;
+            $dbpass = $dbpass_;
+            $dbname = $dbname_;
 
             //connecting to the database
             $connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);

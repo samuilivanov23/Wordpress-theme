@@ -228,10 +228,12 @@
                             //my_index = i
                         });
                         
-                        document.getElementById('current').innerHTML = '<p>AGAIN...111..Marker position: Lat: ' + first_marker.position.lat() + 
+                        document.getElementById('marker_position').innerHTML = '<p>Marker position: Lat: ' + first_marker.position.lat() + 
                                                             ' Lng: ' + first_marker.position.lng() + '</p>';
                     });
                 }
+
+                document.getElementById('markers_count').innerHTML = '<p>Markers count: ' + markers.length + '</p>';
             }
 
         </script>

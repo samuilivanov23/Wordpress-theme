@@ -1,6 +1,7 @@
 <?php get_header();?>
 
     <h1> The map with locations</h1>
+    <h3 id="markers_count"></h3>
 
     <form action="/wordpress/index.php" method="post">
         <label for="city">City</label><br>
@@ -19,6 +20,5 @@
     </form>
 
     <div id="map"></div>
-    <div id="current">Nothing yet...</div>
-
+    <div id="marker_position">No selected marker yet.</div>
 <?php get_footer();?>

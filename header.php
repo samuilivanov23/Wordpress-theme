@@ -9,7 +9,6 @@
 
         <?php
             include 'conf-db.php';
-
             //connecting to the database
             $connection = mysqli_connect($dbhost_, $dbuser_, $dbpass_, $dbname_);
 
@@ -19,7 +18,33 @@
                 die("Connection failed: " . $connection->connect_error);
             }
 
-            $sql_query = "select * from locations";
+            echo "<p>city: " . $_POST["city"] . "</p>";
+            echo "<p>state: " . $_POST["state"] . "</p>";
+
+            $city = $_POST["city"];;
+            $state = $_POST["state"];
+            $sql_query = "";
+
+            if($_POST["city"] == "" && $_POST["state"] == "")
+            {
+                echo "<p>i dvete sa null</p>";
+                $sql_query = "select * from locations";
+            }
+            else if($_POST["city"] != "")
+            {
+                echo "<p>state e null</p>";
+                $sql_query = "select * from locations where city = '".$city."'";
+            }
+            else if($_POST["state"] != "")
+            {
+                echo "<p>city e null</p>";
+                $sql_query = "select * from locations where state_ = '".$state."'";
+            }
+
+            echo "<p> $sql_query </p>";
+
+            //$sql_query = "select * from locations";
+            
             $result = $connection->query($sql_query);
             $latitude_array = array();
             $longitude_array = array();
@@ -29,35 +54,24 @@
                 while($row = $result->fetch_assoc()) 
                 {
                     //adding the locations to arrays
-                    //Add location filtering
-                    // if($row["state_"] == "CA")
-                    // {
-                    //     $latitude_array[] = $row["latitude"];
-                    //     $longitude_array[] = $row["longitude"];
-                    // }
-
                     $latitude_array[] = $row["latitude"];
                     $longitude_array[] = $row["longitude"];
-                    
-                    // {lat: $row["latitude"], lng: $row["longitude"]};
                 }
-
             }
             else 
             {
-                echo "No rows in this table";
+                echo "No rows in this table ......";
             }
             mysqli_close($connection);
+            
         ?>
 
         <script type="text/javascript">
 
             function initMap()
             {
-                var lon_array = <?php echo json_encode($longitude_array); ?>;
                 var lat_array =<?php echo json_encode($latitude_array); ?>;
-
-                console.log("map is not showing...");
+                var lon_array = <?php echo json_encode($longitude_array); ?>;
 
                 var map = new google.maps.Map(document.getElementById('map'), {
                     zoom: 3,

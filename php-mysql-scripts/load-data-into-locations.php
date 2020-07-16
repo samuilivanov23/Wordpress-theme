@@ -21,7 +21,6 @@
     }
 
     $jsonArrayResponse = json_decode($locations, true);
-    //echo count($jsonArrayResponse["records"]) . " test: \n";
 
     for ($i = 0; $i < count($jsonArrayResponse["records"]); $i++) 
     {
@@ -51,7 +50,6 @@
 
 
     $jsonArrayResponse = json_decode($second_locations, true);
-    //echo count($jsonArrayResponse["records"]) . " test: \n";
 
     for ($i = 0; $i < count($jsonArrayResponse["records"]); $i++) 
     {
@@ -70,7 +68,4 @@
     }
 
     $connection->close();
-
-    //echo $jsonArrayResponse["records"][0]["fields"]["city"] . "\n";
-    //var_dump($jsonArrayResponse);
 ?>

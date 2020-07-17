@@ -30,11 +30,21 @@
         $latitude = $jsonArrayResponse["records"][$i]["fields"]["latitude"];
         $longitude = $jsonArrayResponse["records"][$i]["fields"]["longitude"];
 
-        $sql = "INSERT INTO locations(zipcode, city, state_, latitude, longitude)
-            VALUES ('".$zip_code."', '".$city."', '".$state."', '".$latitude."', '".$longitude."')";
-        if(!mysqli_query($connection, $sql))
+        $check_duplicate_rows = $connection->query("select * from locations where zipcode = '".$zip_code."'");
+
+        if($check_duplicate_rows->num_rows > 0)
         {
-           die('Error while executing sql query');
+            die('Error while executing sql query: Duplicate rows');
+        }
+        else
+        {
+            $sql = "INSERT INTO locations(zipcode, city, state_, latitude, longitude)
+                VALUES ('".$zip_code."', '".$city."', '".$state."', '".$latitude."', '".$longitude."')";
+
+            if(!mysqli_query($connection, $sql))
+            {
+                die('Error while executing sql query');
+            }
         }
     }
 
@@ -59,11 +69,21 @@
         $latitude = $jsonArrayResponse["records"][$i]["fields"]["latitude"];
         $longitude = $jsonArrayResponse["records"][$i]["fields"]["longitude"];
 
-        $sql = "INSERT INTO locations(zipcode, city, state_, latitude, longitude)
-            VALUES ('".$zip_code."', '".$city."', '".$state."', '".$latitude."', '".$longitude."')";
-        if(!mysqli_query($connection, $sql))
+        $check_duplicate_rows = $connection->query("select * from locations where zipcode = '".$zip_code."'");
+
+        if($check_duplicate_rows->num_rows > 0)
         {
-           die('Error while executing sql query');
+            die('Error while executing sql query: Duplicate rows');
+        }
+        else
+        {
+            $sql = "INSERT INTO locations(zipcode, city, state_, latitude, longitude)
+                VALUES ('".$zip_code."', '".$city."', '".$state."', '".$latitude."', '".$longitude."')";
+
+            if(!mysqli_query($connection, $sql))
+            {
+                die('Error while executing sql query');
+            }
         }
     }
 

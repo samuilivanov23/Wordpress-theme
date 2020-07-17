@@ -87,14 +87,16 @@
                     {
                         if($first_point_latitude > $second_point_latitude)
                         {
-                            $sql_query = "select * from locations where longitude <= '" . $first_point_longitude . "'" 
+                            $sql_query = "select * from locations where city = '".$city."'" 
+                                                                . "and longitude <= '" . $first_point_longitude . "'" 
                                                                 . "and longitude >= '" . $second_point_longitude . "'"
                                                                 . "and latitude <= '" . $first_point_latitude . "'"
                                                                 . "and latitude >= '" . $second_point_latitude . "'";
                         }
                         else
                         {
-                            $sql_query = "select * from locations where longitude <= '" . $first_point_longitude . "'" 
+                            $sql_query = "select * from locations where city = '".$city."'" 
+                                                                . "and longitude <= '" . $first_point_longitude . "'" 
                                                                 . "and longitude >= '" . $second_point_longitude . "'"
                                                                 . "and latitude >= '" . $first_point_latitude . "'"
                                                                 . "and latitude <= '" . $second_point_latitude . "'";
@@ -105,14 +107,16 @@
                     {
                         if($first_point_latitude > $second_point_latitude)
                         {
-                            $sql_query = "select * from locations where longitude >= '" . $first_point_longitude . "'" 
+                            $sql_query = "select * from locations where city = '".$city."'" 
+                                                                . "and longitude >= '" . $first_point_longitude . "'" 
                                                                 . "and longitude <= '" . $second_point_longitude . "'"
                                                                 . "and latitude <= '" . $first_point_latitude . "'"
                                                                 . "and latitude >= '" . $second_point_latitude . "'";
                         }
                         else
                         {
-                            $sql_query = "select * from locations where longitude >= '" . $first_point_longitude . "'" 
+                            $sql_query = "select * from locations where city = '".$city."'" 
+                                                                . "and longitude >= '" . $first_point_longitude . "'" 
                                                                 . "and longitude <= '" . $second_point_longitude . "'"
                                                                 . "and latitude >= '" . $first_point_latitude . "'"
                                                                 . "and latitude <= '" . $second_point_latitude . "'";
@@ -133,14 +137,16 @@
                     {
                         if($first_point_latitude > $second_point_latitude)
                         {
-                            $sql_query = "select * from locations where longitude <= '" . $first_point_longitude . "'" 
+                            $sql_query = "select * from locations where state_ = '".$state."'" 
+                                                                . "and longitude <= '" . $first_point_longitude . "'" 
                                                                 . "and longitude >= '" . $second_point_longitude . "'"
                                                                 . "and latitude <= '" . $first_point_latitude . "'"
                                                                 . "and latitude >= '" . $second_point_latitude . "'";
                         }
                         else
                         {
-                            $sql_query = "select * from locations where longitude <= '" . $first_point_longitude . "'" 
+                            $sql_query = "select * from locations where state_ = '".$state."'" 
+                                                                . "and longitude <= '" . $first_point_longitude . "'" 
                                                                 . "and longitude >= '" . $second_point_longitude . "'"
                                                                 . "and latitude >= '" . $first_point_latitude . "'"
                                                                 . "and latitude <= '" . $second_point_latitude . "'";
@@ -151,14 +157,16 @@
                     {
                         if($first_point_latitude > $second_point_latitude)
                         {
-                            $sql_query = "select * from locations where longitude >= '" . $first_point_longitude . "'" 
+                            $sql_query = "select * from locations where state_ = '".$state."'" 
+                                                                . "and longitude >= '" . $first_point_longitude . "'" 
                                                                 . "and longitude <= '" . $second_point_longitude . "'"
                                                                 . "and latitude <= '" . $first_point_latitude . "'"
                                                                 . "and latitude >= '" . $second_point_latitude . "'";
                         }
                         else
                         {
-                            $sql_query = "select * from locations where longitude >= '" . $first_point_longitude . "'" 
+                            $sql_query = "select * from locations where state_ = '".$state."'" 
+                                                                . "longitude >= '" . $first_point_longitude . "'" 
                                                                 . "and longitude <= '" . $second_point_longitude . "'"
                                                                 . "and latitude >= '" . $first_point_latitude . "'"
                                                                 . "and latitude <= '" . $second_point_latitude . "'";

@@ -19,6 +19,7 @@
             }
 
             //taking filter data
+            $zip_code = $_POST["zip_code"];
             $city = $_POST["city"];
             $state = $_POST["state"];
             $first_point_latitude = $_POST["first_point_latitude"];
@@ -28,11 +29,14 @@
 
             $sql_query = "";
 
-            if($city == "" && $state == "")
+            if($zip_code != "")
+            {
+                $sql_query = "select * from locations where zipcode = '".$zip_code."'";
+            }
+            else if($city == "" && $state == "")
             {
                 if($first_point_latitude == "" && $first_point_longitude == "" && $second_point_latitude == "" & $second_point_longitude == "")
                 {
-                    echo "<p>i dvete sa null</p>";
                     $sql_query = "select * from locations";
                 }
                 else 
@@ -78,7 +82,6 @@
             {
                 if($first_point_latitude == "" && $first_point_longitude == "" && $second_point_latitude == "" & $second_point_longitude == "")
                 {
-                    echo "<p>state e null</p>";
                     $sql_query = "select * from locations where city = '".$city."'";
                 }
                 else
@@ -128,7 +131,6 @@
             {
                 if($first_point_latitude == "" && $first_point_longitude == "" && $second_point_latitude == "" & $second_point_longitude == "")
                 {
-                    echo "<p>city e null</p>";
                     $sql_query = "select * from locations where state_ = '".$state."'";
                 }
                 else

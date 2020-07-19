@@ -2,7 +2,7 @@
 
     <h1 class="margin_style"> The map with locations</h1>
     <h3 class="margin_style" id="markers_count"></h3>
-    <h4 class="margin_style" id="markers_count">These are the initial loaded markers around the east side of USA. <br>However, there are markers all around USA. <br>Use the filters below to select which markers you want to see.</h4>
+    <h4 class="margin_style" id="markers_description"></h4>
 
     <form class="margin_style" action="/wordpress/index.php" method="post">
         <label for="city">City</label><br>
@@ -43,6 +43,8 @@
         <input class="button button_style" type="submit" value="Submit">
     </form>
 
-    <div id="marker_position">No selected marker yet.</div>
+    <div id="marker_position">No selected marker yet. 
+                            <br>Make sure that the first marker is the top right and the second is the bottom left marker.
+                            <br>Otherwise the input data will not be valid</div>
     <div id="map"></div>
 <?php get_footer();?>

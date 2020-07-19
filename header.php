@@ -32,13 +32,14 @@
             $start_point_longitude = -73;
             $end_point_latitude = 30;
             $end_point_longitude = -90;
+            $initial_map_description = 0;
 
             $sql_query = "";
 
             //filter data only by city, zipcode or state
             function generateSqlQueryByText($filter_data_name, $filter_data_value)
             {
-                return "select * from locations where " . $filter_data_name . " = '" . $filter_data_value . "'";
+                return "select latitude, longitude from locations where " . $filter_data_name . " = '" . $filter_data_value . "'";
             }
 
             //filter data only by two selected points
@@ -47,7 +48,7 @@
                                                     $filter_second_point_latitude, 
                                                     $filter_second_point_longitude)
             {
-                return "select * from locations where longitude <= '" . $filter_first_point_longitude . "'" 
+                return "select latitude, longitude from locations where longitude <= '" . $filter_first_point_longitude . "'" 
                                                     . "and longitude >= '" . $filter_second_point_longitude . "'"
                                                     . "and latitude <= '" . $filter_first_point_latitude . "'"
                                                     . "and latitude >= '" . $filter_second_point_latitude . "'";
@@ -61,7 +62,7 @@
                                                         $filter_second_point_latitude, 
                                                         $filter_second_point_longitude)
             {
-                return "select * from locations where " .$filter_data_name . " = '" . $filter_data_value . "'" 
+                return "select latitude, longitude from locations where " .$filter_data_name . " = '" . $filter_data_value . "'" 
                                                 . "and longitude <= '" . $filter_first_point_longitude . "'" 
                                                 . "and longitude >= '" . $filter_second_point_longitude . "'"
                                                 . "and latitude <= '" . $filter_first_point_latitude . "'"
@@ -73,6 +74,7 @@
                 if($zip_code == "" && $city == "" && $state == "")
                 {
                     $sql_query = generateSqlQueryByPositions($start_point_latitude, $start_point_longitude, $end_point_latitude, $end_point_longitude);
+                    $initial_map_description = 1; //used when putting description for the loaded markers on the map
                 }
                 else if($zip_code != "")
                 {
@@ -145,6 +147,7 @@
                 var center_latitude = <?php echo $center_latitude; ?>;
                 var center_longitude = <?php echo $center_longitude; ?>;
                 var initial_zoom_level = <?php echo $initial_zoom_level; ?>;
+                var initial_map_description = <?php echo $initial_map_description; ?>;
                 
                 if(!lat_array.length == 0 && !lon_array.length == 0)
                 {
@@ -182,6 +185,16 @@
                     }
 
                     document.getElementById('markers_count').innerHTML = '<p>Markers count: ' + markers.length + '</p>';
+                    
+                    //Description for the markers currently loaded on the map 
+                    if(initial_map_description == 1)
+                    {
+                        document.getElementById('markers_description').innerHTML = '<p>These are the initial loaded markers around the east side of USA.<br>However, there are markers all around USA.<br>Use the filters below to select which markers you want to see.</p>';
+                    }
+                    else
+                    {
+                        document.getElementById('markers_description').innerHTML = '<p>These are the selected markers</p>';
+                    }
                 }
                 else
                 {

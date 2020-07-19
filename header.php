@@ -198,10 +198,16 @@
                     $latitude_array[] = $row["latitude"];
                     $longitude_array[] = $row["longitude"];
                 }
+                $center_latitude = $latitude_array[0];
+                $center_longitude = $longitude_array[0];
+                $initial_zoom_level = 6;
             }
             else 
             {
                 echo "The input data is not matching any markers.";
+                $center_latitude = 40;
+                $center_longitude = -90;
+                $initial_zoom_level = 4;
             }
             mysqli_close($connection);
             
@@ -215,9 +221,9 @@
                 var lon_array = <?php echo json_encode($longitude_array); ?>;
 
                 //initial map options variables;
-                var center_latitude = 35;
-                var center_longitude = -85;
-                var initial_zoom_level = 6;
+                var center_latitude = <?php echo $center_latitude; ?>;
+                var center_longitude = <?php echo $center_longitude; ?>;
+                var initial_zoom_level = <?php echo $initial_zoom_level; ?>;
                 
                 if(!lat_array.length == 0 && !lon_array.length == 0)
                 {

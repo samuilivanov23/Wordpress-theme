@@ -13,9 +13,10 @@
     // sql to create locations table
     $sql = "CREATE TABLE locations (
         id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        recordId VARCHAR(40) NOT NULL,
         zipcode VARCHAR(5) NOT NULL,
         city VARCHAR(30) NOT NULL,
-        state_ VARCHAR(2) NOT NULL,
+        state VARCHAR(2) NOT NULL,
         latitude DECIMAL(9, 6) NOT NULL,
         longitude DECIMAL(9, 6) NOT NULL
     )";

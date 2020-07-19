@@ -24,6 +24,7 @@
 
     for ($i = 0; $i < count($jsonArrayResponse["records"]); $i++) 
     {
+        $recordId = $jsonArrayResponse["records"][$i]["recordid"];
         $zip_code = $jsonArrayResponse["records"][$i]["fields"]["zip"];
         $city = $jsonArrayResponse["records"][$i]["fields"]["city"];
         $state = $jsonArrayResponse["records"][$i]["fields"]["state"];
@@ -38,8 +39,8 @@
         }
         else
         {
-            $sql = "INSERT INTO locations(zipcode, city, state_, latitude, longitude)
-                VALUES ('".$zip_code."', '".$city."', '".$state."', '".$latitude."', '".$longitude."')";
+            $sql = "INSERT INTO locations(recordId, zipcode, city, state, latitude, longitude)
+                VALUES ('".$recordId."', '".$zip_code."', '".$city."', '".$state."', '".$latitude."', '".$longitude."')";
 
             if(!mysqli_query($connection, $sql))
             {
@@ -63,6 +64,7 @@
 
     for ($i = 0; $i < count($jsonArrayResponse["records"]); $i++) 
     {
+        $recordId = $jsonArrayResponse["records"][$i]["recordid"];
         $zip_code = $jsonArrayResponse["records"][$i]["fields"]["zip"];
         $city = $jsonArrayResponse["records"][$i]["fields"]["city"];
         $state = $jsonArrayResponse["records"][$i]["fields"]["state"];
@@ -77,8 +79,8 @@
         }
         else
         {
-            $sql = "INSERT INTO locations(zipcode, city, state_, latitude, longitude)
-                VALUES ('".$zip_code."', '".$city."', '".$state."', '".$latitude."', '".$longitude."')";
+            $sql = "INSERT INTO locations(recordId, zipcode, city, state, latitude, longitude)
+                VALUES ('".$recordId."', '".$zip_code."', '".$city."', '".$state."', '".$latitude."', '".$longitude."')";
 
             if(!mysqli_query($connection, $sql))
             {

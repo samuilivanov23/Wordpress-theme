@@ -86,7 +86,7 @@
                 }
                 else if($state != "")
                 {
-                    $sql_query = generateSqlQueryByText("state_", $state);
+                    $sql_query = generateSqlQueryByText("state", $state);
                 }
             }
             else
@@ -105,7 +105,7 @@
                 }
                 else if($state != "")
                 {
-                    $sql_query = generateSqlQueryByTextAndPosition("state_", $state, $first_point_latitude, $first_point_longitude, $second_point_latitude, $second_point_longitude);
+                    $sql_query = generateSqlQueryByTextAndPosition("state", $state, $first_point_latitude, $first_point_longitude, $second_point_latitude, $second_point_longitude);
                 }
             }
 

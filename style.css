@@ -20,8 +20,6 @@ Author: Samuil
 
 .button 
 {
-    background-color: #4CAF50; /* Green */
-    border: none;
     color: white;
     padding: 8px 16px;
     text-align: center;
@@ -44,12 +42,6 @@ Author: Samuil
     background-color: #008CBA;
     color: white;
 }
-
-/* .button_style
-{
-    background-color: royalblue;
-    color: white;
-} */
 
 body 
 {

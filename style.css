@@ -8,6 +8,49 @@ Author: Samuil
     height: 700px;
 }
 
+#marker_position
+{
+    margin: 10px;
+}
+
+.margin_style
+{
+    margin-left: 10px;
+}
+
+.button 
+{
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+.button_style 
+{
+    background-color: white; 
+    color: black; 
+    border: 2px solid #008CBA;
+}
+
+.button_style:hover 
+{
+    background-color: #008CBA;
+    color: white;
+}
+
+/* .button_style
+{
+    background-color: royalblue;
+    color: white;
+} */
+
 body 
 {
     height: 700px;

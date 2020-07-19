@@ -27,7 +27,7 @@
             $second_point_latitude = $_POST["second_point_latitude"];
             $second_point_longitude = $_POST["second_point_longitude"];
 
-            //initial map options variables;
+            //initial map area to be loaded with markers;
             $start_point_latitude = 41;
             $start_point_longitude = -73;
             $end_point_latitude = 30;
@@ -35,154 +35,75 @@
 
             $sql_query = "";
 
-            if($zip_code != "")
+            //filter data only by city, zipcode or state
+            function generateSqlQueryByText($filter_data_name, $filter_data_value)
             {
-                $sql_query = "select * from locations where zipcode = '".$zip_code."'";
+                return "select * from locations where " . $filter_data_name . " = '" . $filter_data_value . "'";
             }
-            else if($city == "" && $state == "")
-            {
-                if($first_point_latitude == "" && $first_point_longitude == "" && $second_point_latitude == "" & $second_point_longitude == "")
-                {
-                    $sql_query = "select * from locations where longitude <= '" . $start_point_longitude . "'" 
-                                                        . "and longitude >= '" . $end_point_longitude . "'"
-                                                        . "and latitude <= '" . $start_point_latitude . "'"
-                                                        . "and latitude >= '" . $end_point_latitude . "'";
-                }
-                else 
-                {
-                    if($first_point_longitude > $second_point_longitude)
-                    {
-                        if($first_point_latitude > $second_point_latitude)
-                        {
-                            $sql_query = "select * from locations where longitude <= '" . $first_point_longitude . "'" 
-                                                                . "and longitude >= '" . $second_point_longitude . "'"
-                                                                . "and latitude <= '" . $first_point_latitude . "'"
-                                                                . "and latitude >= '" . $second_point_latitude . "'";
-                        }
-                        else
-                        {
-                            $sql_query = "select * from locations where longitude <= '" . $first_point_longitude . "'" 
-                                                                . "and longitude >= '" . $second_point_longitude . "'"
-                                                                . "and latitude >= '" . $first_point_latitude . "'"
-                                                                . "and latitude <= '" . $second_point_latitude . "'";
-                        }
 
-                    }
-                    else
-                    {
-                        if($first_point_latitude > $second_point_latitude)
-                        {
-                            $sql_query = "select * from locations where longitude >= '" . $first_point_longitude . "'" 
-                                                                . "and longitude <= '" . $second_point_longitude . "'"
-                                                                . "and latitude <= '" . $first_point_latitude . "'"
-                                                                . "and latitude >= '" . $second_point_latitude . "'";
-                        }
-                        else
-                        {
-                            $sql_query = "select * from locations where longitude >= '" . $first_point_longitude . "'" 
-                                                                . "and longitude <= '" . $second_point_longitude . "'"
-                                                                . "and latitude >= '" . $first_point_latitude . "'"
-                                                                . "and latitude <= '" . $second_point_latitude . "'";
-                        }
-                    }
-                }
+            //filter data only by two selected points
+            function generateSqlQueryByPositions($filter_first_point_latitude, 
+                                                    $filter_first_point_longitude, 
+                                                    $filter_second_point_latitude, 
+                                                    $filter_second_point_longitude)
+            {
+                return "select * from locations where longitude <= '" . $filter_first_point_longitude . "'" 
+                                                    . "and longitude >= '" . $filter_second_point_longitude . "'"
+                                                    . "and latitude <= '" . $filter_first_point_latitude . "'"
+                                                    . "and latitude >= '" . $filter_second_point_latitude . "'";
             }
-            else if($_POST["city"] != "")
-            {
-                if($first_point_latitude == "" && $first_point_longitude == "" && $second_point_latitude == "" & $second_point_longitude == "")
-                {
-                    $sql_query = "select * from locations where city = '".$city."'";
-                }
-                else
-                {
-                    if($first_point_longitude > $second_point_longitude)
-                    {
-                        if($first_point_latitude > $second_point_latitude)
-                        {
-                            $sql_query = "select * from locations where city = '".$city."'" 
-                                                                . "and longitude <= '" . $first_point_longitude . "'" 
-                                                                . "and longitude >= '" . $second_point_longitude . "'"
-                                                                . "and latitude <= '" . $first_point_latitude . "'"
-                                                                . "and latitude >= '" . $second_point_latitude . "'";
-                        }
-                        else
-                        {
-                            $sql_query = "select * from locations where city = '".$city."'" 
-                                                                . "and longitude <= '" . $first_point_longitude . "'" 
-                                                                . "and longitude >= '" . $second_point_longitude . "'"
-                                                                . "and latitude >= '" . $first_point_latitude . "'"
-                                                                . "and latitude <= '" . $second_point_latitude . "'";
-                        }
 
-                    }
-                    else
-                    {
-                        if($first_point_latitude > $second_point_latitude)
-                        {
-                            $sql_query = "select * from locations where city = '".$city."'" 
-                                                                . "and longitude >= '" . $first_point_longitude . "'" 
-                                                                . "and longitude <= '" . $second_point_longitude . "'"
-                                                                . "and latitude <= '" . $first_point_latitude . "'"
-                                                                . "and latitude >= '" . $second_point_latitude . "'";
-                        }
-                        else
-                        {
-                            $sql_query = "select * from locations where city = '".$city."'" 
-                                                                . "and longitude >= '" . $first_point_longitude . "'" 
-                                                                . "and longitude <= '" . $second_point_longitude . "'"
-                                                                . "and latitude >= '" . $first_point_latitude . "'"
-                                                                . "and latitude <= '" . $second_point_latitude . "'";
-                        }
-                    }
+            //filter data by city/zipcode/state and two selected points
+            function generateSqlQueryByTextAndPosition($filter_data_name, 
+                                                        $filter_data_value, 
+                                                        $filter_first_point_latitude, 
+                                                        $filter_first_point_longitude, 
+                                                        $filter_second_point_latitude, 
+                                                        $filter_second_point_longitude)
+            {
+                return "select * from locations where " .$filter_data_name . " = '" . $filter_data_value . "'" 
+                                                . "and longitude <= '" . $filter_first_point_longitude . "'" 
+                                                . "and longitude >= '" . $filter_second_point_longitude . "'"
+                                                . "and latitude <= '" . $filter_first_point_latitude . "'"
+                                                . "and latitude >= '" . $filter_second_point_latitude . "'";
+            }
+
+            if($first_point_latitude == "" && $first_point_longitude == "" && $second_point_latitude == "" & $second_point_longitude == "")
+            {
+                if($zip_code == "" && $city == "" && $state == "")
+                {
+                    $sql_query = generateSqlQueryByPositions($start_point_latitude, $start_point_longitude, $end_point_latitude, $end_point_longitude);
+                }
+                else if($zip_code != "")
+                {
+                    $sql_query = generateSqlQueryByText("zipcode", $zip_code);
+                }
+                else if($city != "")
+                {
+                    $sql_query = generateSqlQueryByText("city", $city);
+                }
+                else if($state != "")
+                {
+                    $sql_query = generateSqlQueryByText("state_", $state);
                 }
             }
-            else if($_POST["state"] != "")
+            else
             {
-                if($first_point_latitude == "" && $first_point_longitude == "" && $second_point_latitude == "" & $second_point_longitude == "")
+                if($zip_code == "" && $city == "" && $state == "")
                 {
-                    $sql_query = "select * from locations where state_ = '".$state."'";
+                    $sql_query = generateSqlQueryByPositions($first_point_latitude, $first_point_longitude, $second_point_latitude, $second_point_longitude);
                 }
-                else
+                else if($zip_code != "")
                 {
-                    if($first_point_longitude > $second_point_longitude)
-                    {
-                        if($first_point_latitude > $second_point_latitude)
-                        {
-                            $sql_query = "select * from locations where state_ = '".$state."'" 
-                                                                . "and longitude <= '" . $first_point_longitude . "'" 
-                                                                . "and longitude >= '" . $second_point_longitude . "'"
-                                                                . "and latitude <= '" . $first_point_latitude . "'"
-                                                                . "and latitude >= '" . $second_point_latitude . "'";
-                        }
-                        else
-                        {
-                            $sql_query = "select * from locations where state_ = '".$state."'" 
-                                                                . "and longitude <= '" . $first_point_longitude . "'" 
-                                                                . "and longitude >= '" . $second_point_longitude . "'"
-                                                                . "and latitude >= '" . $first_point_latitude . "'"
-                                                                . "and latitude <= '" . $second_point_latitude . "'";
-                        }
-
-                    }
-                    else
-                    {
-                        if($first_point_latitude > $second_point_latitude)
-                        {
-                            $sql_query = "select * from locations where state_ = '".$state."'" 
-                                                                . "and longitude >= '" . $first_point_longitude . "'" 
-                                                                . "and longitude <= '" . $second_point_longitude . "'"
-                                                                . "and latitude <= '" . $first_point_latitude . "'"
-                                                                . "and latitude >= '" . $second_point_latitude . "'";
-                        }
-                        else
-                        {
-                            $sql_query = "select * from locations where state_ = '".$state."'" 
-                                                                . "longitude >= '" . $first_point_longitude . "'" 
-                                                                . "and longitude <= '" . $second_point_longitude . "'"
-                                                                . "and latitude >= '" . $first_point_latitude . "'"
-                                                                . "and latitude <= '" . $second_point_latitude . "'";
-                        }
-                    }
+                    $sql_query = generateSqlQueryByTextAndPosition("zipcode", $zip_code, $first_point_latitude, $first_point_longitude, $second_point_latitude, $second_point_longitude);
+                }
+                else if($city != "")
+                {
+                    $sql_query = generateSqlQueryByTextAndPosition("city", $city, $first_point_latitude, $first_point_longitude, $second_point_latitude, $second_point_longitude);
+                }
+                else if($state != "")
+                {
+                    $sql_query = generateSqlQueryByTextAndPosition("state_", $state, $first_point_latitude, $first_point_longitude, $second_point_latitude, $second_point_longitude);
                 }
             }
 

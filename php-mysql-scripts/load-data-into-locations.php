@@ -4,16 +4,15 @@
     //getting the dataset form the opendatasoft api.
     $cURLConnection = curl_init();
 
-    curl_setopt($cURLConnection, CURLOPT_URL, 'https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=&rows=5000&start=1');
+    curl_setopt($cURLConnection, CURLOPT_URL, 'https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=&rows=9999&start=1');
     curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
 
     $locations = curl_exec($cURLConnection);
 
     curl_close($cURLConnection);
-    
     //connecting to the database
     $connection = mysqli_connect($dbhost_, $dbuser_, $dbpass_, $dbname_);
-    
+
     //checking if the connection is successful
     if($connection -> connect_error)
     {
@@ -31,60 +30,19 @@
         $latitude = $jsonArrayResponse["records"][$i]["fields"]["latitude"];
         $longitude = $jsonArrayResponse["records"][$i]["fields"]["longitude"];
 
-        $check_duplicate_rows = $connection->query("select * from locations where zipcode = '".$zip_code."'");
+        $check_duplicate_rows = $connection->query("select * from locations where recordId = '".$recordId."'");
 
         if($check_duplicate_rows->num_rows > 0)
         {
-            die('Error while executing sql query: Duplicate rows');
+            echo "<p>Error while executing sql query " . $recordId . " : Duplicate rows</p><br>";
         }
         else
         {
             $sql = "INSERT INTO locations(recordId, zipcode, city, state, latitude, longitude)
                 VALUES ('".$recordId."', '".$zip_code."', '".$city."', '".$state."', '".$latitude."', '".$longitude."')";
-
             if(!mysqli_query($connection, $sql))
             {
-                die('Error while executing sql query');
-            }
-        }
-    }
-
-    //getting the dataset form the opendatasoft api.
-    $cURLConnection = curl_init();
-
-    curl_setopt($cURLConnection, CURLOPT_URL, 'https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=&rows=3999&start=6000');
-    curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
-
-    $second_locations = curl_exec($cURLConnection);
-
-    curl_close($cURLConnection);
-
-
-    $jsonArrayResponse = json_decode($second_locations, true);
-
-    for ($i = 0; $i < count($jsonArrayResponse["records"]); $i++) 
-    {
-        $recordId = $jsonArrayResponse["records"][$i]["recordid"];
-        $zip_code = $jsonArrayResponse["records"][$i]["fields"]["zip"];
-        $city = $jsonArrayResponse["records"][$i]["fields"]["city"];
-        $state = $jsonArrayResponse["records"][$i]["fields"]["state"];
-        $latitude = $jsonArrayResponse["records"][$i]["fields"]["latitude"];
-        $longitude = $jsonArrayResponse["records"][$i]["fields"]["longitude"];
-
-        $check_duplicate_rows = $connection->query("select * from locations where zipcode = '".$zip_code."'");
-
-        if($check_duplicate_rows->num_rows > 0)
-        {
-            die('Error while executing sql query: Duplicate rows');
-        }
-        else
-        {
-            $sql = "INSERT INTO locations(recordId, zipcode, city, state, latitude, longitude)
-                VALUES ('".$recordId."', '".$zip_code."', '".$city."', '".$state."', '".$latitude."', '".$longitude."')";
-
-            if(!mysqli_query($connection, $sql))
-            {
-                die('Error while executing sql query');
+                echo "<p>Error while executing sql query " . $recordId ." : invalid query</p>";
             }
         }
     }

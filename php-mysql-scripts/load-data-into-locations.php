@@ -30,21 +30,29 @@
         $latitude = $jsonArrayResponse["records"][$i]["fields"]["latitude"];
         $longitude = $jsonArrayResponse["records"][$i]["fields"]["longitude"];
 
-        $check_duplicate_rows = $connection->query("select * from locations where recordId = '".$recordId."'");
+        //$check_duplicate_rows = $connection->query("select * from locations where recordId = '".$recordId."'");
 
-        if($check_duplicate_rows->num_rows > 0)
-        {
-            echo "<p>Error while executing sql query " . $recordId . " : Duplicate rows</p><br>";
-        }
-        else
-        {
-            $sql = "INSERT INTO locations(recordId, zipcode, city, state, latitude, longitude)
+
+        $sql = "INSERT INTO locations(recordId, zipcode, city, state, latitude, longitude)
                 VALUES ('".$recordId."', '".$zip_code."', '".$city."', '".$state."', '".$latitude."', '".$longitude."')";
-            if(!mysqli_query($connection, $sql))
-            {
-                echo "<p>Error while executing sql query " . $recordId ." : invalid query</p>";
-            }
+        if(!mysqli_query($connection, $sql))
+        {
+            echo "<p>Error while executing sql query " . $recordId ." : invalid query</p>";
         }
+
+        // if($check_duplicate_rows->num_rows > 0)
+        // {
+        //     echo "<p>Error while executing sql query " . $recordId . " : Duplicate rows</p><br>";
+        // }
+        // else
+        // {
+        //     $sql = "INSERT INTO locations(recordId, zipcode, city, state, latitude, longitude)
+        //         VALUES ('".$recordId."', '".$zip_code."', '".$city."', '".$state."', '".$latitude."', '".$longitude."')";
+        //     if(!mysqli_query($connection, $sql))
+        //     {
+        //         echo "<p>Error while executing sql query " . $recordId ." : invalid query</p>";
+        //     }
+        // }
     }
 
     $connection->close();

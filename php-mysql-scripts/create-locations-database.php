@@ -16,7 +16,7 @@
         recordId VARCHAR(50) NOT NULL UNIQUE,
         zipcode VARCHAR(5) NOT NULL,
         city VARCHAR(30) NOT NULL,
-        state VARCHAR(2) NOT NULL,
+        state VARCHAR(30) NOT NULL,
         latitude DECIMAL(9, 6) NOT NULL,
         longitude DECIMAL(9, 6) NOT NULL
     )";

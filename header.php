@@ -44,7 +44,7 @@
             //filter data only by two selected points
             function generateInitialQuery()
             {
-                return "select latitude, longitude from locations where longitude <= :filter_first_point_longitude
+                return "select city, latitude, longitude from locations where longitude <= :filter_first_point_longitude
                                                                     and longitude >= :filter_second_point_longitude
                                                                     and latitude <= :filter_first_point_latitude
                                                                     and latitude >= :filter_second_point_latitude";
@@ -72,7 +72,7 @@
             }
             else
             {
-                $sql_query = "select latitude, longitude from locations where";
+                $sql_query = "select city, latitude, longitude from locations where";
 
                 if($state != "")
                 {
@@ -134,7 +134,7 @@
             $longitude_array = array();
             $result = $statement->fetchAll();
 
-            if(count($result) > 0/*->num_rows > 0*/)
+            if(count($result) > 0)
             {
                 foreach($result as $row)
                 {

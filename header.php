@@ -9,13 +9,17 @@
 
         <?php
             include 'conf-db.php';
+
             //connecting to the database
-            $connection = mysqli_connect($dbhost_, $dbuser_, $dbpass_, $dbname_);
+            $dbConnection = new PDO('mysql:dbname='.$dbname_.';host='.$dbhost_.';charset=utf8', $dbuser_, $dbpass_);
+
+            $dbConnection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+            $dbConnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             //checking if the connection is successful
-            if($connection -> connect_error) //if(!connection)
+            if($dbConnection -> connect_error)
             {
-                die("Connection failed: " . $connection->connect_error);
+                die("Connection failed: " . $dbConnection->connect_error);
             }
 
             //taking filter data
@@ -35,99 +39,116 @@
             $initial_map_description = 0;
 
             $sql_query = "";
-
-            //filter data only by city, zipcode or state
-            function generateSqlQueryByText($filter_data_name, $filter_data_value)
-            {
-                return "select latitude, longitude from locations where " . $filter_data_name . " = '" . $filter_data_value . "'";
-            }
+            $params = array();
 
             //filter data only by two selected points
-            function generateSqlQueryByPositions($filter_first_point_latitude, 
-                                                    $filter_first_point_longitude, 
-                                                    $filter_second_point_latitude, 
-                                                    $filter_second_point_longitude)
+            function generateInitialQuery()
             {
-                return "select latitude, longitude from locations where longitude <= '" . $filter_first_point_longitude . "'" 
-                                                    . "and longitude >= '" . $filter_second_point_longitude . "'"
-                                                    . "and latitude <= '" . $filter_first_point_latitude . "'"
-                                                    . "and latitude >= '" . $filter_second_point_latitude . "'";
+                return "select latitude, longitude from locations where longitude <= :filter_first_point_longitude
+                                                                    and longitude >= :filter_second_point_longitude
+                                                                    and latitude <= :filter_first_point_latitude
+                                                                    and latitude >= :filter_second_point_latitude";
             }
 
-            //filter data by city/zipcode/state and two selected points
-            function generateSqlQueryByTextAndPosition($filter_data_name, 
-                                                        $filter_data_value, 
-                                                        $filter_first_point_latitude, 
-                                                        $filter_first_point_longitude, 
-                                                        $filter_second_point_latitude, 
-                                                        $filter_second_point_longitude)
+            if($first_point_latitude == ""
+                && $first_point_longitude == ""
+                && $second_point_latitude == ""
+                && $second_point_longitude == ""
+                && $zip_code == ""
+                && $city == ""
+                && $state == "")
             {
-                return "select latitude, longitude from locations where " .$filter_data_name . " = '" . $filter_data_value . "'" 
-                                                . "and longitude <= '" . $filter_first_point_longitude . "'" 
-                                                . "and longitude >= '" . $filter_second_point_longitude . "'"
-                                                . "and latitude <= '" . $filter_first_point_latitude . "'"
-                                                . "and latitude >= '" . $filter_second_point_latitude . "'";
-            }
+                $sql_query = generateInitialQuery();
+                    
+                $params = array("filter_first_point_longitude" => $start_point_longitude, 
+                                "filter_second_point_longitude" => $end_point_longitude, 
+                                "filter_first_point_latitude" => $start_point_latitude, 
+                                "filter_second_point_latitude" => $end_point_latitude);
 
-            if($first_point_latitude == "" && $first_point_longitude == "" && $second_point_latitude == "" & $second_point_longitude == "")
-            {
-                if($zip_code == "" && $city == "" && $state == "")
-                {
-                    $sql_query = generateSqlQueryByPositions($start_point_latitude, $start_point_longitude, $end_point_latitude, $end_point_longitude);
-                    $initial_map_description = 1; //used when putting description for the loaded markers on the map
-                }
-                else if($zip_code != "")
-                {
-                    $sql_query = generateSqlQueryByText("zipcode", $zip_code);
-                }
-                else if($city != "")
-                {
-                    $sql_query = generateSqlQueryByText("city", $city);
-                }
-                else if($state != "")
-                {
-                    $sql_query = generateSqlQueryByText("state", $state);
-                }
+                $statement = $dbConnection->prepare($sql_query);
+                $statement-> execute($params);
+                
+                $initial_map_description = 1; //used when putting description for the loaded markers on the map
             }
             else
             {
-                if($zip_code == "" && $city == "" && $state == "")
+                $sql_query = "select latitude, longitude from locations where";
+
+                if($state != "")
                 {
-                    $sql_query = generateSqlQueryByPositions($first_point_latitude, $first_point_longitude, $second_point_latitude, $second_point_longitude);
+                    $sql_query = $sql_query . " state = :state";
+                    $params["state"] = $state;
                 }
-                else if($zip_code != "")
+                if($city != "")
                 {
-                    $sql_query = generateSqlQueryByTextAndPosition("zipcode", $zip_code, $first_point_latitude, $first_point_longitude, $second_point_latitude, $second_point_longitude);
+                    if($state != "")
+                    {
+                        $sql_query = $sql_query . " and city = :city";
+                    }
+                    else
+                    {
+                        $sql_query = $sql_query . " city = :city";
+                    }
+                    $params["city"] = $city;
                 }
-                else if($city != "")
+                if($zip_code != "")
                 {
-                    $sql_query = generateSqlQueryByTextAndPosition("city", $city, $first_point_latitude, $first_point_longitude, $second_point_latitude, $second_point_longitude);
+                    if($state != "" || $city != "")
+                    {
+                        $sql_query = $sql_query . " and zipcode = :zipcode";
+                    }
+                    else
+                    {
+                        $sql_query = $sql_query . " zipcode = :zipcode";
+                    }
+                    $params["zipcode"] = $zip_code;
                 }
-                else if($state != "")
+                if($first_point_latitude != "" && $first_point_longitude != "" && $second_point_latitude != "" && $second_point_longitude != "")
                 {
-                    $sql_query = generateSqlQueryByTextAndPosition("state", $state, $first_point_latitude, $first_point_longitude, $second_point_latitude, $second_point_longitude);
+                    if($state != "" || $city != "" || $zip_code != "")
+                    {
+                        $sql_query = $sql_query . " and longitude <= :filter_first_point_longitude
+                                                and longitude >= :filter_second_point_longitude
+                                                and latitude <= :filter_first_point_latitude
+                                                and latitude >= :filter_second_point_latitude";
+                    }
+                    else
+                    {
+                        $sql_query = $sql_query . " longitude <= :filter_first_point_longitude
+                                                and longitude >= :filter_second_point_longitude
+                                                and latitude <= :filter_first_point_latitude
+                                                and latitude >= :filter_second_point_latitude";
+                    }
+
+                    $params["filter_first_point_longitude"] = $first_point_longitude;
+                    $params["filter_second_point_longitude"] = $second_point_longitude;
+                    $params["filter_first_point_latitude"] = $first_point_latitude;
+                    $params["filter_second_point_latitude"] = $second_point_latitude;
                 }
             }
 
-            $result = $connection->query($sql_query);
+            $statement = $dbConnection->prepare($sql_query);
+            $statement->execute($params);
+
             $latitude_array = array();
             $longitude_array = array();
+            $result = $statement->fetchAll();
 
-            if($result->num_rows > 0)
+            if(count($result) > 0/*->num_rows > 0*/)
             {
-                while($row = $result->fetch_assoc()) 
+                foreach($result as $row)
                 {
-                    //adding the locations to arrays
                     $latitude_array[] = $row["latitude"];
                     $longitude_array[] = $row["longitude"];
                 }
+                
                 $center_latitude = $latitude_array[0];
                 $center_longitude = $longitude_array[0];
                 $initial_zoom_level = 6;
             }
             else 
             {
-                echo "The input data is not matching any markers.";
+                echo "\nThe input data is not matching any markers.";
                 $center_latitude = 40;
                 $center_longitude = -90;
                 $initial_zoom_level = 4;

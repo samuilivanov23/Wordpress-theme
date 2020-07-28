@@ -153,8 +153,7 @@
                 $center_longitude = -90;
                 $initial_zoom_level = 4;
             }
-            mysqli_close($connection);
-            
+            $dbConnection = null;
         ?>
 
         <script type="text/javascript">

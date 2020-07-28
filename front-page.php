@@ -54,8 +54,23 @@
                                 value="<?php if (isset($_POST["second_point_longitude"])) echo $_POST["second_point_longitude"]; ?>"><br>
         </div>
         
-        <input class="button button_style" type="submit" value="Submit">
+        <div>
+            <input class="button button_style" type="submit" value="Submit">
+            <?php
+                if($_POST["city"] != "" || 
+                   $_POST["state"] != "" || 
+                   $_POST["zip_code"] != "" || 
+                   $_POST["first_point_latitude"] != "" || 
+                   $_POST["first_point_longitude"] != "" || 
+                   $_POST["second_point_latitude"] != "" || 
+                   $_POST["second_point_longitude"] != "")
+                   {
+                       echo "<a class='button button_style margin_style' href = 'http://192.168.48.131/wordpress/'>Reload initial page</a>";
+                   }
+            ?>
+        </div>
     </form>
+
 
     <div id="marker_position">No selected marker yet. 
                             <br><b>Make sure that the first marker is the top right and the second is the bottom left marker.</b>

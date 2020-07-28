@@ -21,7 +21,7 @@
         
         <div class="autocomplete" style="width:300px">
             <label for="zip_code">Zipcode</label><br>
-            <input type="text" id="zip_code" 
+            <input id = "myInputZipcodes" type="text" id="zip_code" 
                                 name="zip_code" 
                                 value="<?php if (isset($_POST["zip_code"])) echo $_POST["zip_code"]; ?>"><br><br>
         </div>
@@ -94,6 +94,31 @@
 
         $sql_query = "";
 
+        //takes all zipcodes existing in the databse
+        if($_POST["city"] != "")
+        {
+            $sql_query = "select zipcode from locations where city = '" . $_POST["city"] . "'";
+        }
+        else if($_POST["state"] != "")
+        {
+            $sql_query = "select zipcode from locations where state = '" . $_POST["state"] . "'";
+        }
+        else
+        {
+            $sql_query = "select zipcode from locations";
+        }
+
+        $statement = $dbConnection->prepare($sql_query);
+        $statement-> execute();
+        $result = $statement->fetchAll();
+        $zipcodes = array();
+
+        foreach($result as $row)
+        {
+           $zipcodes[] = $row["zipcode"];
+        }
+
+        //takes all cities existing in the database
         if ($_POST["state"] != "")
         {
             $sql_query = "select distinct city from locations where state = '" . $_POST["state"] . "'";
@@ -113,6 +138,7 @@
            $cities[] = $row["city"];
         }
 
+        //takes all states existing in the database
         $sql_query = "select distinct state from locations";
         $statement = $dbConnection->prepare($sql_query);
         $statement-> execute();
@@ -265,9 +291,11 @@
 
         var cities = <?php echo json_encode($cities); ?>;
         var states = <?php echo json_encode($states); ?>;
+        var zipcodes = <?php echo json_encode($zipcodes); ?>;
 
         autocomplete(document.getElementById("myInputCities"), cities);
         autocomplete(document.getElementById("myInputStates"), states);
+        autocomplete(document.getElementById("myInputZipcodes"), zipcodes);
 
     </script>
 <?php get_footer();?>

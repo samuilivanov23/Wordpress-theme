@@ -4,7 +4,7 @@
     <h3 class="margin_style" id="markers_count"></h3>
     <h4 class="margin_style" id="markers_description"></h4>
 
-    <form autocomplete="off" class="margin_style" action="/wordpress/index.php" method="post">
+    <form name="Form" autocomplete="off" class="margin_style" action="/wordpress/index.php" method="post">
         <div class="autocomplete" style="width:300px">
             <label for="city">City</label><br>
             <input id = "myInputCities" type="text" id="city" 
@@ -163,7 +163,7 @@
             input.addEventListener("input", function(e) 
             {
                 var all_items_div, single_item_div, i, val = this.value;
-                /*close any already open lists of autocompleted values*/
+                //close any already open lists of autocompleted values
                 closeAllLists();
 
                 if (!val) 

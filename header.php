@@ -195,7 +195,7 @@
                             state: states[i],
                             zipcode: zipcodes[i],
                             self_latitude: lat_array[i],
-                            self_lngitude: lng_array[i]
+                            self_longitude: lng_array[i]
                         });
                     });
 
@@ -203,7 +203,9 @@
                     var markerCluster = new MarkerClusterer(map, markers,
                         {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
                     
-                    
+                    //true -> for first marker
+                    //false -> for second marker
+                    var currentMarker = true;
                     var infowindow = new google.maps.InfoWindow();  
                     for (i = 0; i < markers.length; i++)
                     {
@@ -215,10 +217,23 @@
                                                         "<h1>City: " + marker.city + " </h1>" +
                                                         "<h3>State: " + marker.state + " </h3>" +
                                                         "<h3>Zipcode: " + marker.zipcode + " </h3>" +
-                                                        "<h4> Latitude: " + marker.self_latitude + "  Longitude: " + marker.self_lngitude + " </h4>" +
+                                                        "<h4> Latitude: " + marker.self_latitude + "  Longitude: " + marker.self_longitude + " </h4>" +
                                                     "</div>";
                                 infowindow.setContent(contentString);
                                 infowindow.open(map,marker);
+
+                                if(currentMarker)
+                                {
+                                    document.forms["Form"]["first_point_latitude"].value = marker.self_latitude;
+                                    document.forms["Form"]["first_point_longitude"].value = marker.self_longitude;
+                                    currentMarker = !currentMarker;
+                                }
+                                else
+                                {
+                                    document.forms["Form"]["second_point_latitude"].value = marker.self_latitude;
+                                    document.forms["Form"]["second_point_longitude"].value = marker.self_longitude;
+                                    currentMarker = !currentMarker;
+                                }
                             };
                         })(marker, infowindow));
                     }

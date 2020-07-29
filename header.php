@@ -41,15 +41,6 @@
             $sql_query = "";
             $params = array();
 
-            //filter data only by two selected points
-            function generateInitialQuery()
-            {
-                return "select city, state, zipcode, latitude, longitude from locations where longitude <= :filter_first_point_longitude
-                                                                    and longitude >= :filter_second_point_longitude
-                                                                    and latitude <= :filter_first_point_latitude
-                                                                    and latitude >= :filter_second_point_latitude";
-            }
-
             if($first_point_latitude == ""
                 && $first_point_longitude == ""
                 && $second_point_latitude == ""
@@ -58,15 +49,23 @@
                 && $city == ""
                 && $state == "")
             {
-                $sql_query = generateInitialQuery();
-                    
-                $params = array("filter_first_point_longitude" => $start_point_longitude, 
-                                "filter_second_point_longitude" => $end_point_longitude, 
-                                "filter_first_point_latitude" => $start_point_latitude, 
-                                "filter_second_point_latitude" => $end_point_latitude);
+                $sql_query = "SELECT
+                                    locations.state, locations.city, locations.zipcode, locations.latitude, locations.longitude
+                                FROM
+                                    locations INNER JOIN (
+                                    SELECT
+                                        state,
+                                        GROUP_CONCAT(city order by city asc) as grouped_city
+                                    FROM
+                                        locations
+                                    GROUP BY state) as group_max
+                                    ON locations.state = group_max.state
+                                        AND FIND_IN_SET(city, grouped_city) BETWEEN 1 AND 10
+                                ORDER BY
+                                    locations.state;";
 
                 $statement = $dbConnection->prepare($sql_query);
-                $statement-> execute($params);
+                $statement-> execute();
                 
                 $initial_map_description = 1; //used when putting description for the loaded markers on the map
             }
@@ -150,7 +149,7 @@
                 
                 $center_latitude = $latitude_array[0];
                 $center_longitude = $longitude_array[0];
-                $initial_zoom_level = 6;
+                $initial_zoom_level = 4;
             }
             else 
             {

@@ -72,7 +72,7 @@
     </form>
 
 
-    <div id="marker_position">No selected marker yet. 
+    <div id="marker_position">
                             <br><b>Make sure that the first marker is the top right and the second is the bottom left marker.</b>
                             <br>Otherwise the input data will not be valid</div>
     <div id="map"></div>

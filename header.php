@@ -58,21 +58,6 @@
                 && $city == ""
                 && $state == "")
             {
-                // $sql_query = "SELECT
-                //                     locations.state, locations.city, locations.zipcode, locations.latitude, locations.longitude
-                //                 FROM
-                //                     locations INNER JOIN (
-                //                     SELECT
-                //                         state,
-                //                         GROUP_CONCAT(city order by city asc) as grouped_city
-                //                     FROM
-                //                         locations
-                //                     GROUP BY state) as group_max
-                //                     ON locations.state = group_max.state
-                //                         AND FIND_IN_SET(city, grouped_city) BETWEEN 1 AND 10
-                //                 ORDER BY
-                //                     locations.state;";
-
                 $sql_query = generateInitialQuery();
 
                 $params = array("filter_first_point_longitude" => $start_point_longitude, 

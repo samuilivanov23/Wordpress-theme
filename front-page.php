@@ -65,7 +65,7 @@
                    $_POST["second_point_latitude"] != "" || 
                    $_POST["second_point_longitude"] != "")
                    {
-                       echo "<a onclick='clearFilters()' class='button button_style margin_style'>Reload initial page</a>";
+                       echo "<a onclick='clearFilters()' class='button button_style margin_style'>Clear</a>";
                    }
             ?>
         </div>

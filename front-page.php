@@ -65,7 +65,7 @@
                    $_POST["second_point_latitude"] != "" || 
                    $_POST["second_point_longitude"] != "")
                    {
-                       echo "<a class='button button_style margin_style' href = 'http://192.168.48.131/wordpress/'>Reload initial page</a>";
+                       echo "<a onclick='clearFilters()' class='button button_style margin_style'>Reload initial page</a>";
                    }
             ?>
         </div>
@@ -152,6 +152,18 @@
     ?>
 
     <script type="text/javascript">
+
+        function clearFilters()
+        {
+            document.forms["Form"]["city"].value = "";
+            document.forms["Form"]["state"].value = "";
+            document.forms["Form"]["zip_code"].value = "";
+            document.forms["Form"]["first_point_latitude"].value = "";
+            document.forms["Form"]["first_point_longitude"].value = "";
+            document.forms["Form"]["second_point_latitude"].value = "";
+            document.forms["Form"]["second_point_longitude"].value = "";
+        }
+
         //first arg -> the text field
         //second arg -> the array of cities
         function autocomplete(input, cities) 
@@ -192,7 +204,8 @@
 
                         //make the matching letters bold
                         single_item_div.innerHTML = "<strong>" + cities[i].substr(0, val.length) + "</strong>";
-                        single_item_div.innerHTML += cities[i].substr(val.length); //probvai bez tva
+                        //the rest of the letters are normal
+                        single_item_div.innerHTML += cities[i].substr(val.length); 
                         
                         //add input field that will hold the current items's value (the name of the city)
                         single_item_div.innerHTML += "<input type='hidden' value='" + cities[i] + "'>";
